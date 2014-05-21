@@ -40,81 +40,83 @@ def adquierefecha(ip):
         if r == 0:
             tiempoDB = time.mktime(aa)
             tiempoSys = time.mktime(time.localtime())
-            config.logging.info(tiempoDB)
-            config.logging.info(tiempoSys)
+            config.logging.info( tiempoDB)
+            config.logging.info( tiempoSys)
             minutosDesincronizados = (tiempoSys - tiempoDB)/60
             entero =int(round(minutosDesincronizados))
-            config.logging.info(hex(entero))
+            config.logging.info( hex(entero))
 
-            config.logging.info(format(entero, '#06X'))
+            config.logging.info( format(entero, '#06X'))
             valor =format(entero, '#06X')
 
             if entero >=11:
                 _39 = "{0}{1}".format(_39,valor[2:])
-                config.logging.info(minutosDesincronizados)
+                config.logging.info( minutosDesincronizados)
             else:
-                _39="{0}{1}".format(_39,"0000")
-                config.logging.info("0")
+                _39="{0}{1}".format(_39,"0001")
+                config.logging.info( "0")
         else:
-            config.logging.debug("No internet   codigo de error 6")
-
+            config.logging.debug( "No internet   codigo de error 6")
+            _39="{0}{1}".format(_39,"0006")
         # Close DB object
         cursor.close()
         db.close()
     except MySQLdb.Error, e:
-        config.logging.debug("Error {0}".format(e.args))
-        _39="{0}{1}".format(_39,"0006")
+        config.logging.debug( "Error {0}".format(e.args))
+        _39="{0}{1}".format(_39,"0005")
 
 #GET /A/B/7F260009333900000008 0000 0000 0000 0000 0000 0000 0000 0000 7561 0000 051F FFED 0000 0000 HTTP/1.1
 ip =1
 
 
 while True:
-
-    if ip <= 14:
-        adquierefecha(ip)
-        print _39
-        if ip == 14:
-            s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.connect(("nebulalisten.com",3001))
-            s.send("{0}{1}{2}".format(encabezado39msn1,_39,final39))      #"0000000000000000000000000000000075610000051FFFED00000000 HTTP/1.1")
-            config.logging.info(s.recv(1024))
-            s.close()
-            _39 =""
-        ip+=1
-    elif ip > 14 and ip <=28:
-        adquierefecha(ip)
-        config.logging.info(_39)
-        if ip == 28:
-            s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.connect(("nebulalisten.com",3001))
-            s.send("{0}{1}{2}".format(encabezado39msn2,_39,final39))
-            config.logging.info(s.recv(1024))
-            s.close()
-            _39 =""
-        ip+=1
-    elif ip > 28 and ip <=42:
-        adquierefecha(ip)
-        config.logging.info(_39)
-        if ip == 42:
-            s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.connect(("nebulalisten.com",3001))
-            s.send("{0}{1}{2}".format(encabezado39msn3,_39,final39))
-            config.logging.info(s.recv(1024))
-            s.close()
-            _39 =""
-        ip+=1
-    elif ip > 42 and ip <= 56:
-        adquierefecha(ip)
-        config.logging.info(_39)
-        if ip == 56:
-            s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.connect(("nebulalisten.com",3001))
-            s.send("{0}{1}{2}".format(encabezado39msn4,_39,final39))
-            config.logging.info(s.recv(1024))
-            s.close()
-            _39 =""
-        ip+=1
-    else:
-        ip=1
-    	#time.sleep(600)
+    try:
+        if ip <= 14:
+            adquierefecha(ip)
+            config.logging.info( _39)
+            if ip == 14:
+                s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                s.connect(("nebulalisten.com",3001))
+                s.send("{0}{1}{2}".format(encabezado39msn1,_39,final39))      #"0000000000000000000000000000000075610000051FFFED00000000 HTTP/1.1")
+                config.logging.info( s.recv(1024))
+                s.close()
+                _39 =""
+            ip+=1
+        elif ip > 14 and ip <=28:
+            adquierefecha(ip)
+            config.logging.info( _39)
+            if ip == 28:
+                s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                s.connect(("nebulalisten.com",3001))
+                s.send("{0}{1}{2}".format(encabezado39msn2,_39,final39))
+                config.logging.info( s.recv(1024))
+                s.close()
+                _39 =""
+            ip+=1
+        elif ip > 28 and ip <=42:
+            adquierefecha(ip)
+            config.logging.info( _39)
+            if ip == 42:
+                s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                s.connect(("nebulalisten.com",3001))
+                s.send("{0}{1}{2}".format(encabezado39msn3,_39,final39))
+                config.logging.info( s.recv(1024))
+                s.close()
+                _39 =""
+            ip+=1
+        elif ip > 42 and ip <= 56:
+            adquierefecha(ip)
+            config.logging.info( _39)
+            if ip == 56:
+                s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                s.connect(("nebulalisten.com",3001))
+                s.send("{0}{1}{2}".format(encabezado39msn4,_39,final39))
+                config.logging.info( s.recv(1024))
+                s.close()
+                _39 =""
+            ip+=1
+        else:
+            ip=1
+    except socket.timeout,e:
+        config.logging.debug("-----Time Out socket No hay internet-------")
+    time.sleep(120)

@@ -6,7 +6,7 @@ import threading
 
 # Logging
 logging.basicConfig(format='%(asctime)s - [%(levelname)s]: %(message)s',
-                    filename='/home/logs/ManejadorEventosG4.log',
+                    filename='/home/logs/supervisor.log',
                     level=logging.INFO)
 
 # Delays
