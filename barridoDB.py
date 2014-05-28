@@ -44,8 +44,12 @@ def ConexionDB():
     temp = cursor.fetchone()
     fechaBd = temp['fecha_adquisicion']
 
+    # Close DB object
+    cursor.close()
+    db.close()
+
     # Get ntp time
-    r = os.system('ntpdate {0}'.format(config.ntpserver))
+    #r = os.system('ntpdate {0}'.format(config.ntpserver))
 
     hora = str(fechaBd)
     fecha = str(fechaBd)
@@ -70,10 +74,6 @@ def ConexionDB():
         config.logging.info("No Internet   codigo de Error!!!! 0006")
         _39= "{0}{1}".format(_39, "0006")
 
-    # Close DB object
-    cursor.close()
-    db.close()
-
 
 def adquierefecha(ip):
     global comando, _39, r, secuenciaIp
@@ -84,17 +84,16 @@ def adquierefecha(ip):
     try:
         config.logging.info("Intentando comunicacion con Base de Datos")
         ConexionDB()
-
+        time.sleep(2)
     except MySQLdb.Error, e:
         config.logging.info("Reintentando comunicacion con Base de Datos")
         try:
             ConexionDB()
-
+            time.sleep(2)
         except MySQLdb.Error, e:
             config.logging.info("Reintentando comunicacion con Base de Datos")
             try:
                 ConexionDB()
-
             except MySQLdb.Error, e:
                 config.logging.info("Comunicacion con Base de Datos Fallida")
                 config.logging.info("Error {0}  0005".format(e.args))
@@ -104,7 +103,7 @@ def adquierefecha(ip):
 ip =1
 config.logging.info("Inicializando...")
 time.sleep(60)
-#SincronizarReloj()
+SincronizarReloj()
 
 while True:
     try:
@@ -113,7 +112,7 @@ while True:
             config.logging.debug( _39)
 
             if ip == 14:
-                #SincronizarReloj()
+                SincronizarReloj()
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 s.connect(("nebulalisten.com",3001))
                 s.send("{0}{1}{2}".format(encabezado39msn1,_39,final39))      #"0000000000000000000000000000000075610000051FFFED00000000 HTTP/1.1")
@@ -126,7 +125,7 @@ while True:
             adquierefecha(ip)
             config.logging.debug( _39)
             if ip == 28:
-                #SincronizarReloj()
+                SincronizarReloj()
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 s.connect(("nebulalisten.com",3001))
                 s.send("{0}{1}{2}".format(encabezado39msn2,_39,final39))
@@ -139,7 +138,7 @@ while True:
             adquierefecha(ip)
             config.logging.debug(_39)
             if ip == 42:
-                #SincronizarReloj()
+                SincronizarReloj()
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 s.connect(("nebulalisten.com",3001))
                 s.send("{0}{1}{2}".format(encabezado39msn3,_39,final39))
@@ -152,7 +151,7 @@ while True:
             adquierefecha(ip)
             config.logging.debug( _39)
             if ip == 56:
-                #SincronizarReloj()
+                SincronizarReloj()
                 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 s.connect(("nebulalisten.com",3001))
                 s.send("{0}{1}{2}".format(encabezado39msn4,_39,final39))
