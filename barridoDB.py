@@ -8,8 +8,6 @@ import os
 import config
 
 
-
-
 encabezado39msn1 = "GET /A/B/7F260009813900000008"
 encabezado39msn2 = "GET /A/B/7F260009823900000008"
 encabezado39msn3 = "GET /A/B/7F260009833900000008"
@@ -68,11 +66,11 @@ def ConexionDB():
             _39 = "{0}{1}".format(_39, valor[2:])
             config.logging.info( minutosDesincronizados)
         else:
-            _39="{0}{1}".format(_39, "0001")
-            config.logging.info( "Todo Normal 0001")
+            _39="{0}{1}".format(_39, "000A")
+            config.logging.info( "Todo Normal 000A")
     else:
-        config.logging.info("No Internet   codigo de Error!!!! 0006")
-        _39= "{0}{1}".format(_39, "0006")
+        config.logging.info("No Internet   codigo de Error!!!! 0001")
+        _39= "{0}{1}".format(_39, "0001")
 
 
 def adquierefecha(ip):
